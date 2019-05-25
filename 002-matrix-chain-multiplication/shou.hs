@@ -9,6 +9,15 @@ memoize f ms (l,r) = (map (f ms . decode) [0..]) !! (encode (l,r))
         encode (l,r) = len * l + r
         decode i = i `divMod` len
 
+mcm' :: ([MatSize] -> (Int, Int) -> Integer) ->
+        ([MatSize] -> (Int, Int) -> Integer)
+mcm' f ms (a,b)
+  | a == b     = 0
+  | a + 1 == b = multOpCount (ms !! a) (ms !! b)
+  | otherwise  = minimum $ map mcmAtCut [a+1..b-1]
+    where mcmAtCut i = f ms (a,i) + f ms (i+1,b) + cost i
+          cost i = multOpCount (ms!!i) (ms!!(i+1))
+
 mcm :: [MatSize] -> Integer
 mcm [] = 0
 mcm [m] = 0
