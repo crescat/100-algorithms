@@ -14,4 +14,3 @@ def next_p(s):
     return left + higher_min + ''.join(sorted(new_right))
 
 print(next_p('FAED'))
-    
