@@ -1,52 +1,55 @@
+import Debug.Trace
+import Data.Function
+import Text.Printf
+
+import Data.Function.Memoize
 
 type MatSize = (Integer, Integer)
 
---          matrices     l      r      total multOpCount
-memoize :: ([MatSize] -> (Int, Int) -> Integer) ->
-           ([MatSize] -> (Int, Int) -> Integer)
-memoize f ms (l,r) = (map (f ms . decode) [0..]) !! (encode (l,r))
-  where len = length ms
-        encode (l,r) = len * l + r
-        decode i = i `divMod` len
+--         len      l    r       total multOpCount
+-- memoize :: Int -> ((Int, Int) -> Integer) -> ((Int, Int) -> Integer)
+-- memoize len f (l,r) = (map (f . decode) [0..]) !! (encode (l,r))
+--   where encode (l,r) = len * l + r
+--         decode i = i `divMod` len
 
-mcm' :: ([MatSize] -> (Int, Int) -> Integer) ->
-        ([MatSize] -> (Int, Int) -> Integer)
-mcm' f ms (a,b)
+mcm' :: [MatSize] -> ((Int, Int) -> Integer) -> ((Int, Int) -> Integer)
+mcm' ms f (a,b)
   | a == b     = 0
-  | a + 1 == b = multOpCount (ms !! a) (ms !! b)
-  | otherwise  = minimum $ map mcmAtCut [a+1..b-1]
-    where mcmAtCut i = f ms (a,i) + f ms (i+1,b) + cost i
-          cost i = multOpCount (ms!!i) (ms!!(i+1))
+  | otherwise  = minimum $ map mcmAtCut [a..b-1]
+    where mcmAtCut i = f (a,i) + f (i+1,b) + costAtCut i
+          costAtCut i = multOpCount (shape a i) (shape (i+1) b)
+          shape l r = multShape (take (r-l+1) $ drop l ms)
+
+mcm'' :: [MatSize] -> (Int, Int) -> Integer
+mcm'' ms (a,b)
+  | a == b     = 0
+  | otherwise  = minimum $ map mcmAtCut [a..b-1]
+    where mcmAtCut i = mcm'' ms (a,i) + mcm'' ms (i+1,b) + costAtCut i
+          costAtCut i = multOpCount (shape a i) (shape (i+1) b)
+          shape l r = multShape (take (r-l+1) $ drop l ms)
 
 mcm :: [MatSize] -> Integer
-mcm [] = 0
-mcm [m] = 0
-mcm [a,b] = multOpCount a b
-mcm ms = minimum $ map (subseqMcm ms) [1..(length ms-1)]
+mcm ms = fix (mcm' ms) (0, length ms - 1)
 
-subseqMcm :: [MatSize] -> Int -> Integer
-subseqMcm ms i = mcm left + mcm right + multOp
-  where left  = take i ms
-        right = drop i ms
-        leftShape  = multShape left
-        rightShape = multShape right
-        multOp = multOpCount leftShape rightShape
-
-
+memoizedMcm :: [MatSize] -> Integer
+memoizedMcm ms = memoize2 mcm'' ms (0, length ms - 1)
+  where len = length ms
 
 multShape :: [MatSize] -> MatSize
-multShape [a] = a
-multShape xs = let (a,b) = head xs
-                   (c,d) = last xs
-               in (a,d)
+multShape [] = error "no mult size for no mat"
+multShape xs = (fst $ head $ xs, snd $ last $ xs)
 
 multOpCount :: MatSize -> MatSize -> Integer
 multOpCount (a,b) (_c,d) = a * d * b
 
 
 main = do
-  let mat = [(10,20), (20,30), (30,40)]
-  print $ mcm mat
+  let mat = zip [1..20] [2..]
+  -- print $ fromIntegral $ mcm mat
+  print $ fromIntegral $ memoizedMcm mat
+
+  let mat = zip [1..20] [2..]
+  print $ fromIntegral $ memoizedMcm mat
 
 
 
