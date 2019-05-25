@@ -1,6 +1,14 @@
 
 type MatSize = (Integer, Integer)
 
+--          matrices     l      r      total multOpCount
+memoize :: ([MatSize] -> (Int, Int) -> Integer) ->
+           ([MatSize] -> (Int, Int) -> Integer)
+memoize f ms (l,r) = (map (f ms . decode) [0..]) !! (encode (l,r))
+  where len = length ms
+        encode (l,r) = len * l + r
+        decode i = i `divMod` len
+
 mcm :: [MatSize] -> Integer
 mcm [] = 0
 mcm [m] = 0
@@ -8,14 +16,13 @@ mcm [a,b] = multOpCount a b
 mcm ms = minimum $ map (subseqMcm ms) [1..(length ms-1)]
 
 subseqMcm :: [MatSize] -> Int -> Integer
-subseqMcm ms i = leftMcm + rightMcm + multOp
-  where left = take i ms
+subseqMcm ms i = mcm left + mcm right + multOp
+  where left  = take i ms
         right = drop i ms
-        leftShape = multShape left
+        leftShape  = multShape left
         rightShape = multShape right
-        leftMcm = mcm left
-        rightMcm = mcm right
         multOp = multOpCount leftShape rightShape
+
 
 
 multShape :: [MatSize] -> MatSize
