@@ -6,15 +6,16 @@ def calc(s):
     result = []
     operators = ['+', '-', '*', '/']
     for x in lst:
+        print(result)
         if x in operators:
             if x == '+':
-                result[-2:] += [result[-2] + result[-1]]
+                result[-2:] = [result[-2] + result[-1]]
             elif x == '-':
-                result[-2:] += [result[-2] - result[-1]]
+                result[-2:] = [result[-2] - result[-1]]
             elif x == '*':
-                result[-2:] += [result[-2] * result[-1]]
+                result[-2:] = [result[-2] * result[-1]]
             elif x == '/':
-                result[-2:] += [result[-2] / result[-1]]
+                result[-2:] = [result[-2] / result[-1]]
         
         else:
             result += [float(x)]
