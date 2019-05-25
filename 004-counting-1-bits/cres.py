@@ -6,4 +6,4 @@ def counting_1_bits(binary_number):
     return count
 
 
-print(counting_1_bits(0b10100101101011101))
+print(counting_1_bits(0b1010010110101111101))
