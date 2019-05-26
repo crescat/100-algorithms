@@ -8,6 +8,6 @@ def calc_pi(n):
     for x, y in random_nums:
         if x*x + y*y <= 1:
             count += 1
-    return float(count) / float(n) * 4
+    return count / n * 4
 
 print(calc_pi(1000000))
