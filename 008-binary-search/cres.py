@@ -1,6 +1,6 @@
 # Day 8: Binary search on sorted array
 
-def search(array, item, cursor):
+def search(array, item, cursor=0):
     if array == []:
         return False
 
@@ -22,4 +22,4 @@ def search(array, item, cursor):
     else:
         return False
 
-print(search([1,2,3,4,6,7,9,10,11], 8, 0))
+print(search([1,2,3,4,6,7,9,10,11], 11, 0))
