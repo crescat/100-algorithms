@@ -3,12 +3,12 @@
 def gcd(x, y):
     a, b = x, y
     while True:
+        if a == 0 or b == 0:
+            return max(a, b)
         if a > b:
-            a -= b
-        elif a < b:
-            b -= a
+            a %= b
         else:
-            return a
+            b %= a
 
 
-print(gcd(252, 105))
+print(gcd(252, 14))
