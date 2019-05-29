@@ -2,14 +2,19 @@
 
 def gcd(x, y):
     while True:
-        if y == 0:
+        if b == 0:
             return x
         else:
-            z = x % y
-            x, y = y, z
+            c = a % b
+            a, b = b, c
+
+def extended_gcd(a, b):
+    if b == 0:
+        return 1, 0, a
+    else:
+        x, y, g = extended_gcd(b, a % b)
+        x, y = y, (x - (a // b) * y)
+        return x, y, g
 
 
-
-
-
-print(gcd(28, 252))
+print(extended_gcd(56, 252))
