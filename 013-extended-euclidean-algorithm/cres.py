@@ -1,13 +1,15 @@
 # Day 13: Extended euclidean algorithm
 
 def gcd(x, y):
-    a, b = max(x, y), min(x, y)
     while True:
-        if b == 0:
-            return a
+        if y == 0:
+            return x
         else:
-            c = a % b
-            a, b = b, c
+            z = x % y
+            x, y = y, z
 
 
-print(gcd(252, 28))
+
+
+
+print(gcd(28, 252))
