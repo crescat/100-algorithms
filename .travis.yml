@@ -1,0 +1,12 @@
+language: python
+
+python:
+  - "3.6"
+
+# Enable this when you need to install deps
+#
+# install: pip install -r requirements.txt
+
+script: bash ./ci-script.sh
+
+
