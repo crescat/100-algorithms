@@ -36,8 +36,22 @@ def encode(doc):
     return result
 
 
+def decode(tree, encoded_doc):
+    cursor = tree
+    result = ''
+    for x in encoded_doc:
+        cursor = cursor[x]
+
+        if type(cursor) is str:
+            result += cursor
+            cursor = tree
+
+    return result
+
 
 tree = make_tree('AAABBCDEGGGSCCCCCCCCDS')
 table = tree_to_table(tree)
+encoded = encode('AAABBCDEGGGSCCCCCCCCDS')
 print(tree, table)
-print(encode('AAABBCDEGGGSCCCCCCCCDS'))
+print(encoded)
+print(decode(tree, encoded))
