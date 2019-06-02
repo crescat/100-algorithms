@@ -1,4 +1,4 @@
-def inversions(lst):
+def merge_sort(lst):
     def merge(lst1, lst2):
         if lst1 == []:
             return lst2, 0
@@ -22,9 +22,19 @@ def inversions(lst):
 
     m = len(lst) // 2
 
-    left, lcount = inversions(lst[:m])
-    right, rcount = inversions(lst[m:])
+    left, lcount = merge_sort(lst[:m])
+    right, rcount = merge_sort(lst[m:])
     result, count = merge(left, right)
-    return result, lcount+rcount
+    return result, lcount + rcount + count
 
-print(inversions([23, 6, 17, 0, 18, 28, 29, 4, 15, 11]))
+
+def naive_inversions(lst):
+    count = 0
+    for i in range(len(lst)):
+        pivot = lst[i]
+        rest = lst[i+1:]
+        count += len([rest[j] for j in range(len(rest)) if pivot > rest[j]])
+    return count
+
+
+print(naive_inversions([23, 6, 17, 0, 18, 28, 29, 4, 15, 11]))
