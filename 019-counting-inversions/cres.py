@@ -1,31 +1,28 @@
-def merge_sort(lst):
-    def merge(lst1, lst2):
-        if lst1 == []:
-            return lst2, 0
-
-        if lst2 == []:
-            return lst1, 0
-
-        if lst1[0] >= lst2[0]:
-            merged, count = merge(lst1, lst2[1:])
-            return [lst2[0]] + merged, count+1
-
-        if lst1[0] < lst2[0]:
-            merged, count = merge(lst1[1:], lst2)
-            return [lst1[0]] + merged, count
-
-    if lst == []:
-        return [], 0
-
+def merge_sort_inversion(lst):
     if len(lst) == 1:
         return lst, 0
 
-    m = len(lst) // 2
+    middle = len(lst) // 2
+    left, l_inv = merge_sort_inversion(lst[:middle])
+    right, r_inv= merge_sort_inversion(lst[middle:])
+    total_inv = l_inv + r_inv
 
-    left, lcount = merge_sort(lst[:m])
-    right, rcount = merge_sort(lst[m:])
-    result, count = merge(left, right)
-    return result, lcount + rcount + count
+    i, j = 0, 0
+    sorted_lst = []
+
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            sorted_lst += [left[i]]
+            i += 1
+        else:
+            sorted_lst += [right[j]]
+            j += 1
+            total_inv += (len(left) - i)
+
+    sorted_lst += left[i:]
+    sorted_lst += right[j:]
+
+    return sorted_lst, total_inv
 
 
 def naive_inversions(lst):
@@ -37,4 +34,4 @@ def naive_inversions(lst):
     return count
 
 
-print(naive_inversions([23, 6, 17, 0, 18, 28, 29, 4, 15, 11]))
+print(merge_sort_inversion([23, 6, 17, 0, 18, 28, 29, 4, 15, 11]))
