@@ -34,20 +34,25 @@ def search(lst_of_points):
 
         min_left = search_helper(left)
         min_right = search_helper(right)
-        min_lr = min(min_left, min_right, key=lambda x: x[0])
-        cross_l, cross_r = [], []
+        margin = min(min_left, min_right, key=lambda x: x[0])[0]
 
-        for x, y in points:
-            diff = x - middle_x
-            if diff < 0 and diff >= -min_lr[0]:
-                cross_l.append((x, y))
-            if diff >= 0 and diff <= min_lr[0]:
-                cross_r.append((x, y))
+        cross_l = [(x, y) for x, y in left  if middle_x - x <= margin]
+        cross_r = [(x, y) for x, y in right if x - middle_x <= margin]
+        valid_pairs = []
 
-        cross_dist = [(dist(a, b), a, b) for a in left for b in right]
-        min_cross = min(cross_dist, key=lambda x: x[0])
+        for x1, y1 in cross_l:
+            for x2, y2 in cross_r:
+                if x2 - x1 <= margin and abs(y2 - y1) <= margin:
+                    valid_pairs.append([(x1, y1), (x2, y2)])
 
-        return min(min_lr, min_cross, key=lambda x: x[0])
+        cross_dist = [(dist(pair[0], pair[1]), pair[0], pair[1]) for pair in valid_pairs]
+
+        if cross_dist != []:
+            min_cross = min(cross_dist, key=lambda x: x[0])
+        else:
+            min_cross = (float('inf'), None, None)
+
+        return min([min_left, min_right, min_cross], key=lambda x: x[0])
 
     return search_helper(points)
 
