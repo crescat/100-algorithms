@@ -1,6 +1,7 @@
 # Day 15: Breaking OTP
 
 import string
+import random
 
 def decode(ciphertext):
     valid_letters = set(string.ascii_lowercase) | {' '}
@@ -25,6 +26,20 @@ def decode(ciphertext):
                 result[i] += '?'
 
     return result
+
+
+def generate_keys(length):
+    return [random.randint(0, 255) for _ in range(length)]
+
+
+def encrypt(text, keys):
+    result = [ord(text[i])^keys[i] for i in range(len(text))]
+    return bytes(result)
+
+
+def decrypt(ciphertext, keys):
+    result = [chr(ciphertext[i]^keys[i]) for i in range(len(ciphertext))]
+    return ''.join(result)
 
 
 def print_by_lines(lst):
