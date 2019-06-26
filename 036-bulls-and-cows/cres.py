@@ -26,18 +26,29 @@ def get_random_unique_numbers():
     return lst
 
 
-def game():
+def game(gamemode = 'manual'):
     ans = get_random_unique_numbers()
     mainloop = True
     trial = 1
     while mainloop:
-        num_input = get_input()
-        numbers = [int(x) for x in num_input.split()]
+        if gamemode == 'manual':
+            num_input = get_input()
+            numbers = [int(x) for x in num_input.split()]
+        elif gamemode == 'auto':
+            numbers = get_random_unique_numbers()
+            print(tuple(numbers))
+
         bulls, cows = check(ans, numbers)
+        print('{} bulls, {} cows'.format(bulls, cows))
+
         if ans == numbers:
             mainloop = False
             print('You won! Your number of trial is {}'.format(trial))
-        print('{} bulls, {} cows'.format(bulls, cows))
+
         trial += 1
 
-game()
+game(gamemode = 'auto')
+# gamemode 'auto' will automatically form random numbers
+# to match the correct numbers.
+# gamemode 'manual'(by default) will take in manually-given
+# numbers to continue the game.
