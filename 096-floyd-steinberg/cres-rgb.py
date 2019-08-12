@@ -12,6 +12,7 @@ def dithering(rgb_matrix, interval):
             for x in range(width):
                 old_value = mtx[y][x][i]
                 new_value = find_closest_value(old_value, interval)
+                mtx[y][x][i] = new_value
                 quant_error = old_value - new_value
                 if x + 1 < width:
                     # right pixel
@@ -66,4 +67,4 @@ def process_image(image_path, output_path, color_interval):
     new_image.save(output_path)
 
 
-process_image("pju.png", "dithered_image.png", 1)
+process_image("kiki.png", "kiki-dithered-rgb.png", 1)
