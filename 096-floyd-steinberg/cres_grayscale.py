@@ -2,6 +2,7 @@
 
 from PIL import Image
 import copy
+import os
 
 def dithering(rgb_matrix, interval):
     width = len(rgb_matrix[0])
@@ -59,12 +60,14 @@ def save_image(matrix, filename):
     new_image.save(filename)
 
 def process_image(image_path, output_path, color_interval):
-    pixel_map = get_pixel_map(image_path)
-    save_image(pixel_map, "grayscale.png")
+    cwd = os.getcwd()
+    pixel_map = get_pixel_map(cwd+"/"+image_path)
+    save_image(pixel_map, cwd+"/"+"grayscale.png")
     dithered_pixel_map = dithering(pixel_map, color_interval)
+    save_image(dithered_pixel_map, cwd+"/"+output_path)
 
+def main():
+    process_image("pyu.png", "pyu-dithered-grayscale.png", 1)
 
-    save_image(dithered_pixel_map, output_path)
-
-
-process_image("096-floyd-steinberg/pyu.png", "096-floyd-steinberg/pyu-dithered-grayscale.png", 1)
+if __name__ == "__main__":
+    main()

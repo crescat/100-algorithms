@@ -1,7 +1,8 @@
-import importlib
+import cres_grayscale
+import cres_rgb
 
 print("Generating rgb dithering")
-importlib.import_module("cres-rgb.py")
+cres_rgb.main()
 
 print("Generating grayscale dithering")
-importlib.import_module("cres-grayscale.py")
+cres_grayscale.main()

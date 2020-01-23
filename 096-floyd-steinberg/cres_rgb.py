@@ -2,6 +2,7 @@
 
 from PIL import Image
 import copy
+import os
 
 def dithering(rgb_matrix, interval):
     width = len(rgb_matrix[0])
@@ -50,7 +51,8 @@ def find_closest_value(value, interval):
 
 
 def process_image(image_path, output_path, color_interval):
-    pixel_map = get_pixel_map(image_path)
+    cwd = os.getcwd()
+    pixel_map = get_pixel_map(cwd+"/"+image_path)
     dithered_pixel_map = dithering(pixel_map, color_interval)
 
     height = len(dithered_pixel_map)
@@ -64,7 +66,10 @@ def process_image(image_path, output_path, color_interval):
             g = round(dithered_pixel_map[y][x][1] * 255)
             b = round(dithered_pixel_map[y][x][2] * 255)
             pixels[x, y] = (r, g, b)
-    new_image.save(output_path)
+    new_image.save(cwd+"/"+output_path)
 
+def main():
+    process_image("kiki.png", "kiki-dithered-rgb.png", 1)
 
-process_image("096-floyd-steinberg/kiki.png", "096-floyd-steinberg/kiki-dithered-rgb.png", 1)
+if __name__ == "__main__":
+    main()
