@@ -60,14 +60,18 @@ def save_image(matrix, filename):
     new_image.save(filename)
 
 def process_image(image_path, output_path, color_interval):
-    cwd = os.getcwd()
-    pixel_map = get_pixel_map(cwd+"/"+image_path)
-    save_image(pixel_map, cwd+"/"+"grayscale.png")
+    pixel_map = get_pixel_map(image_path)
     dithered_pixel_map = dithering(pixel_map, color_interval)
-    save_image(dithered_pixel_map, cwd+"/"+output_path)
+    save_image(dithered_pixel_map, output_path)
+
+def process_image_grayscale(image_path, output_path, color_interval):
+    pixel_map = get_pixel_map(image_path)
+    save_image(pixel_map, output_path)
 
 def main():
-    process_image("pyu.png", "pyu-dithered-grayscale.png", 1)
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    process_image(dir_path+"/pyu.png", dir_path+"/pyu-dithered-grayscale.png", 1)
+    process_image_grayscale(dir_path+"/pyu.png", dir_path+"/pyu-grayscale.png", 1)
 
 if __name__ == "__main__":
     main()

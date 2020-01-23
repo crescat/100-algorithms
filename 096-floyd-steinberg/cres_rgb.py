@@ -51,8 +51,7 @@ def find_closest_value(value, interval):
 
 
 def process_image(image_path, output_path, color_interval):
-    cwd = os.getcwd()
-    pixel_map = get_pixel_map(cwd+"/"+image_path)
+    pixel_map = get_pixel_map(image_path)
     dithered_pixel_map = dithering(pixel_map, color_interval)
 
     height = len(dithered_pixel_map)
@@ -66,10 +65,11 @@ def process_image(image_path, output_path, color_interval):
             g = round(dithered_pixel_map[y][x][1] * 255)
             b = round(dithered_pixel_map[y][x][2] * 255)
             pixels[x, y] = (r, g, b)
-    new_image.save(cwd+"/"+output_path)
+    new_image.save(output_path)
 
 def main():
-    process_image("kiki.png", "kiki-dithered-rgb.png", 1)
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    process_image(dir_path+"/kiki.png", dir_path+"/kiki-dithered-rgb.png", 1)
 
 if __name__ == "__main__":
     main()
