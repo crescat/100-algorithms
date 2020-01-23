@@ -67,4 +67,4 @@ def process_image(image_path, output_path, color_interval):
     save_image(dithered_pixel_map, output_path)
 
 
-process_image("pyu.png", "pyu-dithered-grayscale.png", 1)
+process_image("096-floyd-steinberg/pyu.png", "096-floyd-steinberg/pyu-dithered-grayscale.png", 1)

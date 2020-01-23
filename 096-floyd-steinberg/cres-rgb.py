@@ -67,4 +67,4 @@ def process_image(image_path, output_path, color_interval):
     new_image.save(output_path)
 
 
-process_image("kiki.png", "kiki-dithered-rgb.png", 1)
+process_image("096-floyd-steinberg/kiki.png", "096-floyd-steinberg/kiki-dithered-rgb.png", 1)
